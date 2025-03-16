@@ -93,7 +93,7 @@ async function askOutputDir() {
         type: 'string',
         message: 'Path to your output directory:',
         default() {
-            return 'whatsappChat';
+            return './export/';
         },
     });
 
@@ -151,10 +151,10 @@ async function processChat() {
             messages.map((message, i, arr) => {
                 const prevMessage = arr[i - 1];
                 const  date = new Date(message.date)
-                let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
-                let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
-                let da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(date);
-                let formated_date = `${mo} ${da}, ${ye}`
+                let ye = new Intl.DateTimeFormat('de', { year: 'numeric' }).format(date);
+                let mo = new Intl.DateTimeFormat('de', { month: '2-digit' }).format(date);
+                let da = new Intl.DateTimeFormat('de', { day: '2-digit' }).format(date);
+                let formated_date = `${da}.${mo}.${ye}`
                 if (i === 0) {
                     processedMessages.push({
                         messageDate: formated_date,
@@ -171,7 +171,7 @@ async function processChat() {
                     }
                     processedMessages.push({
                         ...message,
-                        date: new Intl.DateTimeFormat('en-US', intlOptions).format(message.date),
+                        date: new Intl.DateTimeFormat('de-DE', intlOptions).format(message.date),
                         fileMimeType: getMimeType(message?.attachment?.fileName),
                         activeUser: message.author == activeUser ? true : false,
                     })
@@ -179,9 +179,9 @@ async function processChat() {
                     processedMessages.push({
                         ...message,
                         message: linkifyHtml(message.message, options),
-                        edited: message.message.includes("<This message was edited>") ? true : false,
+                        edited: message.message.includes("<Bearbeitet>") ? true : false,
                         fileMimeType: '',
-                        date: new Intl.DateTimeFormat('en-US', intlOptions).format(message.date),
+                        date: new Intl.DateTimeFormat('de-DE', intlOptions).format(message.date),
                         activeUser: message.author == activeUser ? true : false,
                     })
 
@@ -243,7 +243,7 @@ async function askOtherUserName() {
         type: 'string',
         message: 'Other user name (name to display in chat header):',
         default() {
-            return 'John Doe';
+            return 'ChatBot';
         },
     });
     other_user_name = answers.other_user_name;
@@ -252,7 +252,7 @@ async function askForProfilePictureFilePath() {
     const answers = await inquirer.prompt({
         name: 'profile_picture',
         type: 'string',
-        message: 'Profile picture file path example: profile.jpg (leave empty for default profile picture)',
+        message: 'Profile picture file path example: profile.png (leave empty for default profile picture)',
         default() {
             return '';
         },
